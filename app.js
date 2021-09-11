@@ -15,6 +15,7 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+  console.log(images);
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -31,7 +32,7 @@ const showImages = (images) => {
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hitS))
+    .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
 
@@ -51,7 +52,7 @@ var timer
 const createSlider = () => {
   // check slider image length
   if (sliders.length < 2) {
-    alert('Select at least 2 image.')
+    alert('Select at least 2 image.');
     return;
   }
   // crate slider previous next area
@@ -63,20 +64,29 @@ const createSlider = () => {
   <span class="next" onclick="changeItem(1)"><i class="fas fa-chevron-right"></i></span>
   `;
 
-  sliderContainer.appendChild(prevNext)
+  sliderContainer.appendChild(prevNext);
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  const durationId = document.getElementById('duration');
+  let duration;
+  if(durationId .value > 0){
+    duration = durationId.value;
+  }
+  else
+  {
+    alert('Please enter a positive value'); 
+    return;
+  }
   sliders.forEach(slide => {
-    let item = document.createElement('div')
+    let item = document.createElement('div');
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
     src="${slide}"
     alt="">`;
-    sliderContainer.appendChild(item)
-  })
-  changeSlide(0)
+    sliderContainer.appendChild(item);
+  });
+  changeSlide(0);
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
@@ -113,10 +123,10 @@ searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   const search = document.getElementById('search');
-  getImages(search.value)
+  getImages(search.value);
   sliders.length = 0;
-})
+});
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
-})
+  createSlider();
+});
